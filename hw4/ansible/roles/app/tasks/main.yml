@@ -1,0 +1,19 @@
+---
+- name: Create directory
+  file:
+    path: /opt/app
+    state: directory
+    owner: "{{ ansible_user }}"
+  become: yes
+
+- name: Copy
+  copy:
+    src: "{{ app_path }}/src/"
+    dest: /opt/app/
+  become: yes
+
+- name: Build
+  shell: cd /opt/app && go build -o app ./cmd/pdris
+
+- name: Run
+  shell: SERVER_HTTP_ADDR=:8080 SERVER_ENV=dev /opt/app/app </dev/null >/dev/null 2>&1 &
