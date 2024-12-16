@@ -1,0 +1,33 @@
+services:
+  pg:
+    container_name: pg_pdris
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=password
+    image: postgres
+    restart: always
+    networks:
+      - internal-net
+
+  master:
+    build: ./ansible
+    tty: true
+    networks:
+      - internal-net
+
+  slave1:
+    build: ./
+    tty: true
+    networks:
+      - internal-net
+
+  slave2:
+    build: ./
+    tty: true
+    networks:
+      - internal-net
+
+networks:
+  internal-net:
+    driver: bridge
